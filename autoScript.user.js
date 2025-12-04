@@ -17,6 +17,7 @@
 // @match        https://gemini.google.com/app/*
 // @match        http://localhost:2718/*
 // @match        https://*.bilibili.com/*
+// @match        https://www.youtube.com/*
 // @icon         https://icons.duckduckgo.com/ip2/sspai.com.ico
 // @run-at       document-end
 // @grant        GM_addStyle
@@ -90,6 +91,11 @@
         u.searchParams.delete('spm_id_from');
         u.searchParams.delete('trackid');
         y.href = u.toString();
+      });
+  } else if (url.match(/youtube\.com\//)) { // youtube: remove redirect url
+    callback = () => document.querySelectorAll('a[href*="www.youtube.com/redirect?"]')
+      .forEach((y) => {
+        y.href = new URL(y.href).searchParams.get('q');
       });
   }
   if (callback) {
